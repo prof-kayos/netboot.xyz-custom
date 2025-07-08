@@ -1,12 +1,34 @@
 #!ipxe
 ###
-### netboot.xyz-custom menu
+### Custom Menu
 ###
 
-:start
-echo Hello world!
-sleep 10
+:custom
+clear custom_choice
+menu Custom ISO Boot Menu
+item --gap Bazzite
+item bazzite_amd_desktop ${space} Bazzite AMD Desktop
+item bazzite_amd_console ${space} Bazzite AMD Console
+item bazzite_nvidia_desktop ${space} Bazzite NVIDIA Desktop
+choose custom_choice || goto custom_exit
+echo ${cls}
+goto ${custom_choice}
 goto custom_exit
+
+:bazzite_amd_desktop
+kernel https://boot.netboot.xyz/memdisk raw iso
+initrd http://10.0.0.120:8080/bazzite-stable-amd64.iso
+boot || goto custom_exit
+
+:bazzite_amd_console
+kernel https://boot.netboot.xyz/memdisk raw iso
+initrd http://10.0.0.120:8080/bazzite-deck-stable-amd64.iso
+boot || goto custom_exit
+
+:bazzite_nvidia_desktop
+kernel https://boot.netboot.xyz/memdisk raw iso
+initrd http://10.0.0.120:8080/bazzite-nvidia-open-stable-amd64.iso
+boot || goto custom_exit
 
 :custom_exit
 exit 0
